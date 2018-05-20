@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import CardList from "./components/CardList";
+import SearchBox from "./components/SearchBox";
 import "./App.css";
 import "tachyons";
 
@@ -6,44 +8,40 @@ class App extends Component {
    constructor() {
       super();
       this.state = {
-         planet: ""
+         data: [],
+         searchField: ""
       };
-      // this.getVal = this.getVal.bind(this);
    }
 
-   //
-   //    getVal() {
-   //       fetch("https://swapi.co/api/planets/1")
-   //          .then(response => response.json())
-   //          .then(data => {
-   //             console.log(data.name);
-   //             this.setState({
-   //                planet: data.name
-   //             });
-   //          });
-   //    }
-
    componentDidMount() {
-      fetch("https://swapi.co/api/planets/1")
+      fetch("https://swapi.co/api/planets")
          .then(response => response.json())
          .then(data => {
-            console.log(data.name);
+            console.log(data.results);
             this.setState({
-               planet: data.name
+               data: data.results
             });
          });
    }
 
+   onSearchChange = event => {
+      this.setState({ searchField: event.target.value });
+   };
+
    render() {
-      return <div>Here we are: {this.state.planet}</div>;
+      const filteredResults = this.state.data.filter(item => {
+         return item.name
+            .toLowerCase()
+            .includes(this.state.searchField.toLowerCase());
+      });
+      return (
+         <div className="tc">
+            <h1>swAPI</h1>
+            <SearchBox searchChange={this.onSearchChange} />
+            <CardList info={filteredResults} />
+         </div>
+      );
    }
 }
-
-// const App = () => {
-//    const swapi = fetch("https://swapi.co/api/planets/1")
-//       .then(response => response.json())
-//       .then(data => console.log(data));
-//    return swapi;
-// };
 
 export default App;
