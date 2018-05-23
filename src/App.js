@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import CardList from "./components/CardList";
 import SearchBox from "./components/SearchBox";
+import styled from "styled-components";
 import "./App.css";
-import "tachyons";
 
 class App extends Component {
    constructor() {
@@ -29,17 +29,20 @@ class App extends Component {
    };
 
    render() {
+      const RenderDiv = styled.div`
+         text-align: center;
+      `;
       const filteredResults = this.state.data.filter(item => {
          return item.name
             .toLowerCase()
             .includes(this.state.searchField.toLowerCase());
       });
       return (
-         <div className="tc">
+         <RenderDiv>
             <h1>swAPI</h1>
             <SearchBox searchChange={this.onSearchChange} />
             <CardList info={filteredResults} />
-         </div>
+         </RenderDiv>
       );
    }
 }
